@@ -64,25 +64,23 @@
 fetch('./data.json')
   .then(response => response.json())
   .then(data => {
-      const filter = (values, name) => values[name]
+    const context = document.getElementById('covid19-chart').getContext('2d')
 
-      new Chart(document.getElementById('covid19-chart').getContext('2d'), {
-          type: 'scatter',
-          type: 'line',
-          data: {
-              labels: data.map(values => new Date(values.date).toLocaleString('default', { month: 'long', day:'numeric' })),
-              datasets: [
-                  {label: 'Confirmed Cases', data: data.map(values => filter(values, 'cases')), backgroundColor: 'rgba(100%, 50%, 0%, 0.1)'},
-                  {label: 'Hospitalized Patients', data: data.map(values => filter(values, 'hospitalized')), backgroundColor: 'rgba(100%, 50%, 0%, 0.2)'},
-                  {label: 'Fatalities', data: data.map(values => filter(values, 'deceased')), backgroundColor: 'rgba(100%, 0%, 0%, 0.2)'},
-                  {data: data.map(values => values.personnel), label: 'Hospital Personnel'},
-              ],
-          },
-          options: {}
-      });
+    new Chart(context, {
+      type: 'line',
+      data: {
+          labels: data.map(values => new Date(values.date).toLocaleString('default', { month: 'long', day:'numeric' })),
+          datasets: [
+              {label: 'Confirmed Cases', data: data.map(values => values.cases), backgroundColor: 'rgba(100%, 50%, 0%, 0.1)'},
+              {label: 'Hospitalized Patients', data: data.map(values => values.hospitalized), backgroundColor: 'rgba(100%, 50%, 0%, 0.2)'},
+              {label: 'Fatalities', data: data.map(values => values.deceased), backgroundColor: 'rgba(100%, 0%, 0%, 0.2)'},
+              {label: 'Hospital Personnel', data: data.map(values => values.personnel)},
+          ],
+        }
+    })
   })
   .catch(error => {
-    alert(`Sorry, something seems to have gone wrong!\n\n${error}`);
+    alert(`Sorry, something seems to have gone wrong!\n\n${error}`)
     console.log(error)
-  });
+  })
 </script>
