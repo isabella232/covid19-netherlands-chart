@@ -19,6 +19,6 @@
     {"date": "2020-03-15", "cases": 1135, "hospitalized":  162, "deceased":   20, "personnel": null},
     {"date": "2020-03-16", "cases": 1413, "hospitalized":  205, "deceased":   24, "personnel": null},
     {"date": "2020-03-17", "cases": 1705, "hospitalized":  314, "deceased":   43, "personnel":  389},
-    {"date": "2020-03-18", "cases": 2051, "hospitalized":  408, "deceased":   58, "personnel":  485}
+    {"date": "2020-03-18", "cases": 2051, "hospitalized":  408, "deceased":   58, "personnel":  485},
     {"date": "2020-03-19", "cases": null, "hospitalized": null, "deceased": null, "personnel": null}
 ]
