@@ -1,0 +1,23 @@
+[
+    {"date": "2020-02-27", "cases":    1, "hospitalized": null, "deceased": null, "personnel": null},
+    {"date": "2020-02-28", "cases":    2, "hospitalized": null, "deceased": null, "personnel": null},
+    {"date": "2020-02-29", "cases":    5, "hospitalized": null, "deceased": null, "personnel": null},
+    {"date": "2020-03-01", "cases":    8, "hospitalized": null, "deceased": null, "personnel": null},
+    {"date": "2020-03-02", "cases":   16, "hospitalized": null, "deceased": null, "personnel": null},
+    {"date": "2020-03-03", "cases":   22, "hospitalized": null, "deceased": null, "personnel": null},
+    {"date": "2020-03-04", "cases":   38, "hospitalized":    4, "deceased": null, "personnel": null},
+    {"date": "2020-03-05", "cases":   82, "hospitalized":    6, "deceased": null, "personnel": null},
+    {"date": "2020-03-06", "cases":  128, "hospitalized":   11, "deceased":    1, "personnel": null},
+    {"date": "2020-03-07", "cases":  188, "hospitalized":   24, "deceased": null, "personnel": null},
+    {"date": "2020-03-08", "cases":  265, "hospitalized":   36, "deceased":    3, "personnel": null},
+    {"date": "2020-03-09", "cases":  321, "hospitalized": null, "deceased": null, "personnel": null},
+    {"date": "2020-03-10", "cases":  382, "hospitalized": null, "deceased":    4, "personnel": null},
+    {"date": "2020-03-11", "cases":  503, "hospitalized":   62, "deceased":    5, "personnel": null},
+    {"date": "2020-03-12", "cases":  614, "hospitalized":   86, "deceased": null, "personnel":  102},
+    {"date": "2020-03-13", "cases":  804, "hospitalized":  115, "deceased":   10, "personnel":  179},
+    {"date": "2020-03-14", "cases":  959, "hospitalized":  136, "deceased":   12, "personnel": null},
+    {"date": "2020-03-15", "cases": 1135, "hospitalized":  162, "deceased":   20, "personnel": null},
+    {"date": "2020-03-16", "cases": 1413, "hospitalized":  205, "deceased":   24, "personnel": null},
+    {"date": "2020-03-17", "cases": 1705, "hospitalized":  314, "deceased":   43, "personnel":  389},
+    {"date": "2020-03-18", "cases": null, "hospitalized": null, "deceased": null, "personnel": null}
+]
