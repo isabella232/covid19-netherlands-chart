@@ -19,6 +19,9 @@ At the time of this writing (2020-03-18):
 
 The information on the RIVM site is updated daily at 14.00.
 
+If you prefer tabular data (or are wondering where the percantages come from),
+visit this Sheet: https://docs.google.com/spreadsheets/d/1a_3IaIsmJt4WDgdZtrfl2YPzU9LvQWLkCAYFdPe1YkU/
+
 ## Colofon
 
 Chart created with: https://www.chartjs.org/
