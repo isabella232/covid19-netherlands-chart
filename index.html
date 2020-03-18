@@ -1,0 +1,89 @@
+<!doctype html>
+
+<meta charset="utf-8">
+<meta name=viewport content="width=device-width, initial-scale=1">
+<meta name="description" content="Historical chart of known cases of COVID-19, including hospitalised and fatality count" />
+
+<!-- Twitter Card data -->
+<meta name="twitter:site" content="@potherca">
+<meta name="twitter:title" content="History of COVID-19 cases in the Netherlands">
+<meta name="twitter:description" content="Historical chart of known cases of COVID-19, including hospitalised and fatality count">
+<meta name="twitter:creator" content="@potherca">
+
+<!-- Open Graph data -->
+<meta property="og:title" content="History of COVID-19 cases in the Netherlands" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.potherca.com/" />
+<meta property="og:description" content="Historical chart of known cases of COVID-19, including hospitalised and fatality count" />
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js"></script>
+
+<h1>
+  <title>
+    History of COVID-19 cases in the Netherlands
+  </title>
+</h1>
+
+<div class="chart-container">
+  <canvas id="covid19-chart"></canvas>
+</div>
+
+<style>
+  html, body, div, h1 {
+    margin:0;
+    padding:0
+  }
+
+  body {
+    font-family: sans-serif;
+    text-align: center;
+  }
+
+  div {
+    max-height:100%;
+    max-width:100%;
+    position: relative;
+    top: 8vw;
+  }
+
+  h1 {
+    font-family: sans-serif;
+    font-size: 4vw;
+    position: absolute;
+    top: 0em;
+    width: 100%;
+  }
+
+  title {
+    display: block;
+  }
+</style>
+
+<script>
+/*global fetch, Chart*/
+fetch('./data.json')
+  .then(response => response.json())
+  .then(data => {
+      const filter = (values, name) => values[name]
+
+      new Chart(document.getElementById('covid19-chart').getContext('2d'), {
+          type: 'scatter',
+          type: 'line',
+          data: {
+              labels: data.map(values => new Date(values.date).toLocaleString('default', { month: 'long', day:'numeric' })),
+              datasets: [
+                  {label: 'Confirmed Cases', data: data.map(values => filter(values, 'cases')), backgroundColor: 'rgba(100%, 50%, 0%, 0.1)'},
+                  {label: 'Hospitalized Patients', data: data.map(values => filter(values, 'hospitalized')), backgroundColor: 'rgba(100%, 50%, 0%, 0.2)'},
+                  {label: 'Fatalities', data: data.map(values => filter(values, 'deceased')), backgroundColor: 'rgba(100%, 0%, 0%, 0.2)'},
+                  {data: data.map(values => values.personnel), label: 'Hospital Personnel'},
+              ],
+          },
+          options: {}
+      });
+  })
+  .catch(error => {
+    alert(`Sorry, something seems to have gone wrong!\n\n${error}`);
+    console.log(error)
+  });
+</script>
