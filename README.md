@@ -6,6 +6,8 @@ chart of the historical data provided by the RIVM.
 As I needed a clearly outlined task to get used to working from home, I decided
 to create such a chart myself.
 
+See it online at https://blog.pother.ca/covid19-netherlands-chart/
+
 ## Overall information
 
 At the time of this writing (2020-03-18):
