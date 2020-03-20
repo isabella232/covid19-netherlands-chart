@@ -10,11 +10,11 @@ See it online at https://blog.pother.ca/covid19-netherlands-chart/
 
 ## Overall information
 
-At the time of this writing (2020-03-19):
+At the time of this writing (2020-03-20):
 
-- **24.15%** of known cases have been **hospital personnel**
-- **19.88%** of known cases have been **hospitalised**
-- **3.09%** of known cases have been **fatal**
+- **24.22%** of known cases have been **hospital personnel**
+- **21.48%** of known cases have been **hospitalised**
+- **03.54%** of known cases have been **fatal**
 - The age of the fatalities lies between 63 en 95 years
 
 The information on the RIVM site is updated daily at 14.00.
