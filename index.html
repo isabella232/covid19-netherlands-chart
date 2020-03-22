@@ -60,27 +60,68 @@
 </style>
 
 <script>
-/*global fetch, Chart*/
-fetch('./data.json')
-  .then(response => response.json())
-  .then(data => {
+  /*global fetch, Chart */
+
+  const fetchJson = url => fetch(url).then(response => response.ok ? response.json() : {})
+
+  const combineData = data => {
+    const combined = []
+    const ordered = [];
+
+    data.forEach(collection => {
+      if ('data' in collection) {
+        collection = collection.data
+      }
+
+      collection.forEach((items) => {
+        if ('date' in items) {
+          const date = items.date
+
+          if (date in combined === false) {
+            combined[date] = {}
+          }
+
+          Object.entries(items).map(([key, value]) => {
+            if (combined[date][key] === undefined || combined[date][key] === 0) {
+              combined[date][key] = value
+            }
+          })
+
+        }
+      })
+    })
+
+    Object.keys(combined).sort().forEach((key) => {
+      ordered.push(combined[key])
+    });
+
+    return ordered
+  }
+
+  const createChart = data => {
     const context = document.getElementById('covid19-chart').getContext('2d')
 
     new Chart(context, {
       type: 'line',
       data: {
-          labels: data.map(values => new Date(values.date).toLocaleString('default', { month: 'long', day:'numeric' })),
-          datasets: [
-              {label: 'Confirmed Cases', data: data.map(values => values.cases), backgroundColor: 'rgba(100%, 50%, 0%, 0.1)'},
-              {label: 'Hospitalized Patients', data: data.map(values => values.hospitalized), backgroundColor: 'rgba(100%, 50%, 0%, 0.2)'},
-              {label: 'Fatalities', data: data.map(values => values.deceased), backgroundColor: 'rgba(100%, 0%, 0%, 0.2)'},
-              {label: 'Hospital Personnel', data: data.map(values => values.personnel)},
-          ],
-        }
+        labels: data.map(values => new Date(values.date).toLocaleString('default', { month: 'long', day: 'numeric' })),
+        datasets: [
+          { label: 'Confirmed Cases', data: data.map(values => values.cases), backgroundColor: 'rgba(98%, 88%, 12%, 0.2)' },
+          { label: 'Hospitalized Patients', data: data.map(values => values.hospitalized), backgroundColor: 'rgba(100%, 77%, 31%, 0.4)' },
+          { label: 'IC Patients', data: data.map(values => values.intakeCumulative), backgroundColor: 'rgba(100%, 60%, 16%, 0.6)' },
+          { label: 'Fatalities', data: data.map(values => values.deceased), backgroundColor: 'rgba(85%, 37%, 5%, 0.8)' },
+          { label: 'IC Fatalities', data: data.map(values => values.diedCumulative), backgroundColor: 'rgb(60%, 20%, 2%, 1)' },
+          { label: 'Hospital Personnel', data: data.map(values => values.personnel) },
+        ],
+      }
     })
-  })
-  .catch(error => {
-    alert(`Sorry, something seems to have gone wrong!\n\n${error}`)
-    console.log(error)
-  })
+  }
+
+  Promise.all(['https://covid-19-ic.potherca.workers.dev/', './data.json'].map(fetchJson))
+    .then(combineData)
+    .then(createChart)
+    .catch(error => {
+      alert(`Sorry, something seems to have gone wrong!\n\n${error}`)
+      console.log(error)
+    })
 </script>
