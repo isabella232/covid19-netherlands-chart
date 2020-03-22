@@ -29,21 +29,30 @@ This documentation can be found at https://github.com/potherca-blog/covid19-neth
 | intake-cumulative  | Totaal (cumulatief) aantal Covid-19 patiënten waarvoor IC opname nodig was                  |
 | new-intake         | Aantal nieuwe IC opnamen met COVID-19 infectie                                              |
 
-Copyright: 1996-2020 van Stichting NICE
-Source: https://www.stichting-nice.nl/covid-19-op-de-ic.jsp
+## URL endpoints
+
+| Topic              | URL Endpoint                                                       |
+| ------------------ | ------------------------------------------------------------------ |
+| died-cumulative    | https://www.stichting-nice.nl/covid-19/public/died-cumulative/     |
+| ic-cumulative      | https://www.stichting-nice.nl/covid-19/public/ic-cumulative/       |
+| intake-count       | https://www.stichting-nice.nl/covid-19/public/intake-count/        |
+| intake-cumulative  | https://www.stichting-nice.nl/covid-19/public/intake-cumulative/   |
+| new-intake         | https://www.stichting-nice.nl/covid-19/public/new-intake/          |
 
 ## Information per URL endpoint
 
-| Topic              | diedCumulative | icCount | icCumulative | intakeCount | intakeCumulative | newIntake | URL Endpoint                                                       |
-| ------------------ | -------------- | ------- | ------------ | ----------- | ---------------- | --------- | ------------------------------------------------------------------ |
-| died-cumulative    |             ✔ |         |              |             |                  |           | https://www.stichting-nice.nl/covid-19/public/died-cumulative/     |
-| ic-cumulative      |                |         |           ✔ |             |                  |           | https://www.stichting-nice.nl/covid-19/public/ic-cumulative/       |
-| intake-count       |                |      ✔ |              |          ✔ |                  |           | https://www.stichting-nice.nl/covid-19/public/intake-count/        |
-| intake-cumulative  |                |         |              |             |               ✔️ |        ✔️ | https://www.stichting-nice.nl/covid-19/public/intake-cumulative/   |
-| new-intake         |                |         |              |             |                  |        ✔️ | https://www.stichting-nice.nl/covid-19/public/new-intake/          |
+| Topic              | diedCumulative | icCount | icCumulative | intakeCount | intakeCumulative | newIntake |
+| ------------------ | -------------- | ------- | ------------ | ----------- | ---------------- | --------- |
+| died-cumulative    |             ✔ |         |              |             |                  |           |
+| ic-cumulative      |                |         |           ✔ |             |                  |           |
+| intake-count       |                |      ✔ |              |          ✔ |                  |           |
+| intake-cumulative  |                |         |              |             |               ✔️ |        ✔️ |
+| new-intake         |                |         |              |             |                  |        ✔️ |
+
+---
 
 Copyright: 1996-2020 van Stichting NICE
-Source: `https://www.stichting-nice.nl/covid-19/public/{topic}/` (visit "URL Endpoint" from the above table)
+Source: https://www.stichting-nice.nl/covid-19-op-de-ic.jsp
 
 [1]: https://www.stichting-nice.nl/
 [2]: https://www.stichting-nice.nl/covid-19-op-de-ic.jsp
