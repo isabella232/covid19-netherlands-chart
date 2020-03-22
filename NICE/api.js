@@ -26,11 +26,18 @@ async function handleRequest(request) {
   const searchParams = new URL(request.url).searchParams
 
   const config = {
+    allowedMethods: 'GET, HEAD, OPTIONS',
     descriptions: descriptions,
     isPretty: (searchParams.has('pretty') || searchParams.has('verbose')),
     self: request.url,
     showDocs: (searchParams.has('docs') || searchParams.has('verbose')),
     whitelist: Object.keys(descriptions),
+  }
+
+  const corsHeaders = {
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': config.allowedMethods,
+    'Access-Control-Allow-Origin': '*',
   }
 
   const fetchJson = url => fetch(new Request(url))
@@ -40,6 +47,7 @@ async function handleRequest(request) {
     new Response(data, {
       status: 200,
       headers: new Headers({
+        ...corsHeaders,
         'Content-Type': 'application/json',
         'X-Clacks-Overhead': 'GNU Terry Pratchett',
       })
@@ -111,9 +119,15 @@ async function handleRequest(request) {
 
   const stringifyData = data => JSON.stringify(data, null, config.isPretty ? 2 : 0)
 
-  return Promise.all(urlList.map(fetchJson))
-    .then(combineData)
-    .then(formatData)
-    .then(stringifyData)
-    .then(buildResponse)
+  if (event.request.method === 'OPTIONS') {
+    return Response(null, { headers: new Headers({ 'Allow': config.allowedMethods, }) })
+  } else if (event.request.method == 'HEAD') {
+    return new Response(null, { headers: new Headers(corsHeaders), })
+  } else {
+    return Promise.all(urlList.map(fetchJson))
+      .then(combineData)
+      .then(formatData)
+      .then(stringifyData)
+      .then(buildResponse)
+  }
 }
