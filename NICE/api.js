@@ -119,9 +119,9 @@ async function handleRequest(request) {
 
   const stringifyData = data => JSON.stringify(data, null, config.isPretty ? 2 : 0)
 
-  if (event.request.method === 'OPTIONS') {
+  if (request.method === 'OPTIONS') {
     return Response(null, { headers: new Headers({ 'Allow': config.allowedMethods, }) })
-  } else if (event.request.method == 'HEAD') {
+  } else if (request.method == 'HEAD') {
     return new Response(null, { headers: new Headers(corsHeaders), })
   } else {
     return Promise.all(urlList.map(fetchJson))
