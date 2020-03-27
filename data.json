@@ -25,7 +25,7 @@
     {"date": "2020-03-21", "cases": 3631, "hospitalized":  836, "deceased":  136, "personnel": null},
     {"date": "2020-03-22", "cases": 4204, "hospitalized":  988, "deceased":  179, "personnel": null},
     {"date": "2020-03-23", "cases": 4749, "hospitalized": 1230, "deceased":  213, "personnel": null},
-    {"date": "2020-03-24", "cases": 5560, "hospitalized": 1495, "deceased":  276, "personnel": 1230},
+    {"date": "2020-03-24", "cases": 5560, "hospitalized": 1495, "deceased":  276, "personnel": null},
     {"date": "2020-03-25", "cases": 6412, "hospitalized": 1836, "deceased":  356, "personnel": null},
     {"date": "2020-03-26", "cases": 7431, "hospitalized": 2151, "deceased":  434, "personnel": null},
     {"date": "2020-03-27", "cases": 8603, "hospitalized": 2500, "deceased":  546, "personnel": null},
