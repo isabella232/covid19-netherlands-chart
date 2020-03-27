@@ -2,8 +2,6 @@
 
 <meta charset="utf-8">
 
-<script type="text/javascript" src="./api.js"></script>
-
 <h1><title style="display: block;">
   Cloudflare Worker for Stichting NICE - COVID-19 infection in Dutch ICU
 </title></h1>
@@ -40,56 +38,4 @@
   <a href="https://github.com/potherca-blog/covid19-netherlands-chart/tree/master/NICE">https://github.com/potherca-blog/covid19-netherlands-chart/tree/master/NICE</a>
 </p>
 
-<h2>Response</h2>
-
-<div data-js="errors" style="display:none; color:red; border:1px solid;padding: 1em;"></div>
-
-<h3>Headers</h3>
-
-<pre data-js="response-headers"></pre>
-
-<h3>Body</h3>
-
-<pre data-js="response-body"></pre>
-
-<script>  /*global dispatchEvent, Event, Request, URL */
-
-  const handleError = e => {
-    const errorElement = document.querySelector('[data-js="errors"]')
-    errorElement.innerHTML += e
-    errorElement.style.display = 'initial'
-
-    console.error(e)
-  }
-
-  const event = new Event('fetch', {})
-
-  event.request = new Request(document.location)
-
-  event.response = null
-
-  event.respondWith = input => event.response = input
-
-  try {
-    dispatchEvent(event)
-  } catch (e) {
-    handleError(e)
-  }
-
-  event.response
-    .then(e => {
-      e.json().then(data => {
-
-        const searchParams = new URL(document.location).searchParams
-
-        let indent = 0
-        if (searchParams.has('pretty') || searchParams.has('verbose')) {
-          indent = 2
-        }
-
-        document.querySelector('[data-js="response-headers"]').innerHTML += JSON.stringify(Object.fromEntries(e.headers.entries()), null, 2)
-
-        document.querySelector('[data-js="response-body"]').innerHTML += JSON.stringify(data, null, indent)
-      })
-    }).catch(handleError)
-</script>
+<script src="./../src/worker.dispatchEvent.js"></script>
