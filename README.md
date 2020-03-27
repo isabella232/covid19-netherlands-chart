@@ -13,11 +13,11 @@ See it online at https://blog.pother.ca/covid19-netherlands-chart/
 
 ## Overall information
 
-At the time of this writing (2020-03-24):
+At the time of this writing (2020-03-27):
 
 - **25.90%** of known cases have been **hospital personnel**
-- **26.89%** of known cases have been **hospitalised**
-- **04.96%** of known cases have been **fatal**
+- **29.06%** of known cases have been **hospitalised**
+- **6.35%** of known cases have been **fatal**
 - The age of the deceased lies between 55 and 97 years, the median is 82.
 
 The information on the RIVM site at https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus
