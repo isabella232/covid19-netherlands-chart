@@ -24,9 +24,9 @@ window.addEventListener('DOMContentLoaded', () => {
 <pre data-js="response-body"></pre>
 `
 
-  const element = document.createElement('script');
-  element.src = './api.js'
-  document.body.appendChild(element)
+  document.body.appendChild(document.createElement('script')).src = './../src/NICE.js'
+  document.body.appendChild(document.createElement('script')).src = './../src/RIVM.js'
+  document.body.appendChild(document.createElement('script')).src = './../src/api-bootstrap.js'
 })
 
 window.addEventListener('load', () => {
@@ -56,7 +56,9 @@ window.addEventListener('load', () => {
           indent = 2
         }
 
-        document.querySelector('[data-js="response-headers"]').innerHTML += JSON.stringify(Object.fromEntries(e.headers.entries()), null, 2)
+        document.querySelector('[data-js="response-headers"]').innerHTML +=
+          `Status: <span style="background:${e.status < 500 ? 'green' :'red'};color:white;">${e.status}</span> (${e.statusText})\n` +
+          JSON.stringify(Object.fromEntries(e.headers.entries()), null, 2)
 
         document.querySelector('[data-js="response-body"]').innerHTML += JSON.stringify(data, null, indent)
       })
