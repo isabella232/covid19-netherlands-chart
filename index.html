@@ -61,8 +61,9 @@
 
 <script>
   /*global fetch, Chart */
+  const baseUrl = 'https://covid-19.potherca.workers.dev'
 
-  const fetchJson = url => fetch(url).then(response => response.ok ? response.json() : {})
+  const fetchJson = path => fetch(`${baseUrl}/${path}`).then(response => response.ok ? response.json() : {})
 
   const combineData = data => {
     const combined = []
@@ -106,18 +107,23 @@
       data: {
         labels: data.map(values => new Date(values.date).toLocaleString('default', { month: 'long', day: 'numeric' })),
         datasets: [
-          { label: 'Confirmed Cases', data: data.map(values => values.cases), backgroundColor: 'rgba(98%, 88%, 12%, 0.2)' },
-          { label: 'Hospitalized Patients', data: data.map(values => values.hospitalized), backgroundColor: 'rgba(100%, 77%, 31%, 0.4)' },
+          { label: 'Confirmed Cases', data: data.map(values => values['cases-total']), backgroundColor: 'rgba(98%, 88%, 12%, 0.2)' },
+          { label: 'Hospitalized Patients', data: data.map(values => values['hospitalised-total']), backgroundColor: 'rgba(100%, 77%, 31%, 0.4)' },
           { label: 'IC Patients', data: data.map(values => values.intakeCumulative), backgroundColor: 'rgba(100%, 60%, 16%, 0.6)' },
-          { label: 'Fatalities', data: data.map(values => values.deceased), backgroundColor: 'rgba(85%, 37%, 5%, 0.8)' },
+          { label: 'Fatalities', data: data.map(values => values['deceased-total']), backgroundColor: 'rgba(85%, 37%, 5%, 0.8)' },
           { label: 'IC Fatalities', data: data.map(values => values.diedCumulative), backgroundColor: 'rgb(60%, 20%, 2%, 1)' },
-          { label: 'Hospital Personnel', data: data.map(values => values.personnel) },
+          { label: 'Hospital Personnel', data: data.map(values => values['personell-total']) },
         ],
       }
     })
+
+    return data
   }
 
-  Promise.all(['https://covid-19-ic.potherca.workers.dev/', './data.json'].map(fetchJson))
+  Promise.all([
+    'https://covid-19.potherca.workers.dev/RIVM',
+    'https://covid-19.potherca.workers.dev/NICE',
+    ].map(fetchJson))
     .then(combineData)
     .then(createChart)
     .catch(error => {
