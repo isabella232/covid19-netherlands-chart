@@ -1,3 +1,149 @@
+# Things I learned whilst building a COVID-19 graph
+
+- Cloudflare Workers
+  - CORS Headers
+- Chart.js
+- Working with promise chains
+- Combining data sources from several URLs
+
+
+===
+
+# Numbers regarding ICU capacity
+
+## Parool
+
+> "Op grond van de cijfers uit Italië komt ongeveer 10 procent van de besmette mensen op de intensive care terecht"
+> ~ Diederik Gommers -- Chairman of the Dutch Association for Intensive Care
+> (NVIC) and Head of the Erasmus Medical Center
+
+<!--
+> In ‘vredestijd’ heeft Nederland 1150 ic-bedden met beademing. In uiterste nood
+> – als alternatieve zorglocaties in gebruik worden genomen, niet-urgente operaties worden uitgesteld en vrijgekomen medisch-specialisten op de intensive care gaan werken –
+> kan dat aantal worden uitgebreid naar ongeveer 2000.
+>
+> Het omslagpunt van het Nederlandse zorgsysteem ligt bij de corona pandemie dus
+> bij zo’n 20.000 besmettingen.
+-->
+
+Source: https://www.parool.nl/nederland/meer-dan-20-000-geinfecteerden-dan-moeten-artsen-harde-keuzes-maken~bff7be77/
+
+## Volkskrant
+
+> "Bij 12 duizend besmettingen, waarbij 1 op de 10 geïnfecteerden zorg in het
+> ziekenhuiszorg nodig heeft, zijn de bedden op de intensive care (IC) op."
+> ~ Diederik Gommers -- Chairman of the Dutch Association for Intensive Care
+> (NVIC) and Head of the Erasmus Medical Center
+
+              total beds  : 37.753
+            of which ICU  :  2.056
+    of which operational¹ :  1.208
+      of which available² :    360
+
+Source: https://www.volkskrant.nl/nieuws-achtergrond/~bfe053d4/
+
+## RTL Nieuws
+
+> "In heel Nederland zijn 1140 ic-bedden, dit kan snel verhoogd worden naar 1500.
+> Als het nodig is, wordt verder opgeschaald naar 2000 of 3000 bedden."
+> ~ Diederik Gommers -- Chairman of the Dutch Association for Intensive Care
+> (NVIC) and Head of the Erasmus Medical Center
+
+            of which ICU  : 1.150
+    of which operational¹ :   575
+      of which available² :   575
+
+Source: https://www.rtlnieuws.nl/nieuws/nederland/artikel/5063091/corona-ic-capaciteit-intensive-care-diederik-gommers-nvic
+
+## Conclusion
+
+There are somewhere between 360 and 575 beds currently available. This number
+could be increased to 2000 or 3000.
+
+## Footnotes
+
+1. "operational" means a bed is availabel with respiratory equipment and personnel
+2. "available" assumes 70% of beds are already taken by regular patients.
+   This percentage could become lower as more beds could become available due to cancelation of planned operations.
+   Planned operation usually take up to one third of capacity.
+
+## Also...
+
+2020-03-19
+
+Driekwart van de coronapatiënten die overlijden is niet op de intensive care van
+een ziekenhuis geweest. Dat komt deels doordat verpleeghuisartsen of huisartsen
+in samenspraak met betreffende patiënt en familie besluiten om de zieke gelet op
+leeftijd of toestand niet ‘in te sturen’ naar de ic.
+
+Van de 58 patiënten die in Nederland zijn overleden aan corona, lagen er 14 op
+de intensive care, blijkt uit cijfers van de Nationale Intensive Care Evaluatie
+(NICE). De rest stierf op de ‘gewone’ ziekenhuisafdeling, thuis of in het verpleeghuis.
+
+
+Source: https://www.volkskrant.nl/nieuws-achtergrond/driekwart-van-overleden-coronapatienten-in-nederland-kwam-nooit-op-intensive-care~b9c5660d/
+
+===
+
+  'diedCumulative': 'Totaal(cumulatief) aantal COVID-19 opnamen met fatale afloop op de IC',
+  'icCount': 'Aantal verschillende ziekenhuizen met tenminste één COVID-19 infectie',
+  'icCumulative': 'Totaal(cumulatief) aantal verschillende ziekenhuizen met tenminste één COVID-19 infectie',
+  'intakeCount': 'Totaal aantal aanwezige COVID-19 patiënten per datum in de Nederlandse ICs',
+  'intakeCumulative': 'Totaal(cumulatief) aantal COVID-19 patiënten waarvoor IC opname nodig was',
+  'newIntake': 'Aantal nieuwe IC opnamen met COVID-19 infectie',
+
+===
+
+<!-- NOTES
+
+https://docs.google.com/spreadsheets/d/e/2PACX-1vSJgB0TnMFLT8Z5rhpss6gXuST01mGBil6WqT4d0VILIvky9VcKiJhnVcO9-IZIO8ednS8qwhFveUAn/pub?output=csv
+
+died-cumulative + ic-cumulative + intake-cumulative
+
+-->
+
+<script>
+// // Make sure resources are cached to avoid HTTP 429 response codes
+// const requestConfig = {cache: 'force-cache'}
+
+// const fetchJson = url => fetch( new Request('https://cors-anywhere.herokuapp.com/'+url, requestConfig) )
+//   .then( response => response.ok
+//     ? response.json()
+//     : new Error('Could not retrieve API response, status = ' + response.status)
+//   )
+</script>
+
+
+===
+
+| build  | Contruct (something from) already present element(s) |
+| create | Contruct (something from) not yet present element(s) |
+| fetch  | Retrieve not yet present element(s) |
+| get    | Retrieve already present element(s) |
+
+===
+
+TODO:
+
+For the article:
+    - Write about "Mixed Chart Types"
+    - Write about "Drawing order"
+    - Mention that the documentation of Graph.js is a bit scarce
+
+For the graph:
+
+- Add dotted line for available beds (and find/choose data source)
+    - https://www.parool.nl/nederland/meer-dan-20-000-geinfecteerden-dan-moeten-artsen-harde-keuzes-maken~bff7be77/
+    - https://www.rtlnieuws.nl/nieuws/nederland/artikel/5063091/corona-ic-capaciteit-intensive-care-diederik-gommers-nvic
+    - https://www.volkskrant.nl/nieuws-achtergrond/hoe-snel-zijn-de-bedden-in-het-ziekenhuis-op-door-uitbraak-van-het-coronavirus~bfe053d4/
+
+Open URLs:
+
+    https://dev.to/potherca/building-a-chart-of-the-history-of-covid-19-cases-in-the-netherlands-with-chart-js-to-recover-my-mental-balance-485l-temp-slug-4417885?preview=41dddc33ada9beff827266bb2551ad891c2386e1d3901132b6b7f8191624bd358da72f457354a26a3c20ee59433f514241f3eac9c31fee637c0b5d7a
+    https://www.chartjs.org/docs/latest/charts/mixed.html
+
+---
+
 18-03-2020 | 14.00
     15 patiënten overleden, 346 nieuwe patiënten, in totaal 2051 positief geteste personen
     Onder hen zijn 485 mensen die in de zorg werken
@@ -82,3 +228,18 @@
 
 27-2-2020 | 21.15 uur
     Patiënt met nieuw coronavirus in Nederland, totaal = 1
+
+
+===
+
+, {
+    // body: "Any body that you want to add to your request: this can be a Blob, BufferSource, FormData, URLSearchParams, USVString, or ReadableStream object. Note that a request using the GET or HEAD method cannot have a body.",
+    // cache: "The cache mode you want to use for the request.",
+    // credentials: "The request credentials you want to use for the request: omit, same-origin, or include. The default is same-origin.",
+    // headers: "Any headers you want to add to your request, contained within a Headers object or an object literal with ByteString values.",
+    // integrity: "Contains the subresource integrity value of the request (e.g., sha256-BpfBw7ivV8q2jLiT13fxDYAe2tJllusRSZ273h2nFSE=).",
+    // method: "The request method, e.g., GET, POST. The default is GET.",
+    // mode: "The mode you want to use for the request, e.g., cors, no-cors, same-origin, or navigate. The default is cors.",
+    // redirect: "The redirect mode to use: follow, error, or manual. The default is follow.",
+    referrer: document.referrer, // A USVString specifying no-referrer, client, or a URL. The default is "about:client"
+  }
