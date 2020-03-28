@@ -1,0 +1,50 @@
+<!doctype html>
+
+<meta charset="utf-8">
+
+<h1><title style="display: block;">
+  Cloudflare Worker for RIVM - COVID-19 infections in the Netherlands
+</title></h1>
+
+<h2>Introduction</h2>
+
+<p>
+  Netherlands National Institute for Public Health and the Environment (RIVM)
+  has an overview of information related to COVID-19 cases in the Netherlands:
+  <a href="https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus">
+    https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus
+  </a>.
+</p>
+
+<p>
+  The source of this information comes in the form of unstructured HTML.
+  <br>
+  I wanted to use this date for my COVID-19 chart but I did not want to manually
+  update my data every day. To solve this, I create an API that parses the page
+  and return JSON.
+</p>
+
+<p>
+  This is an HTML representation of the Javascript code in
+  <a href="./../src/RIVM.js"><code>src/RIVM.js</code></a> being executed.
+</p>
+
+<p>
+  It is mostly meant for development and testing purposes.
+  For production use this Cloudflare Worker:
+  <a href="https://covid-19.potherca.workers.dev/RIVM/">https://covid-19.potherca.workers.dev/RIVM/</a>
+</p>
+
+<!--
+<p>
+  This information is also offered combined with that from Stichting NICE:
+  <a href="https://covid-19.potherca.workers.dev/">https://covid-19.potherca.workers.dev/</a>
+</p>
+-->
+
+<p>
+  More information can be found at
+  <a href="https://github.com/potherca-blog/covid19-netherlands-chart/">https://github.com/potherca-blog/covid19-netherlands-chart/</a>
+</p>
+
+<script src="./../src/worker.dispatchEvent.js"></script>
