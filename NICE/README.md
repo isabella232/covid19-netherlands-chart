@@ -10,7 +10,7 @@ I wanted to use this date for my COVID-19 chart but I did not feel much like
 making 6 HTTP calls for each request. To solve this, I create an API that makes
 the calls and combines them into one endpoint.
 
-The API endpoint can be found at https://covid-19-ic.potherca.workers.dev/
+The API endpoint can be found at https://covid-19.potherca.workers.dev/NICE
 
 The code used for the endpoint can be found at https://github.com/potherca-blog/covid19-netherlands-chart/blob/master/NICE/api.js
 
