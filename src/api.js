@@ -73,7 +73,8 @@ const nicePromise = (config) => {
 }
 
 const rivmPromise = (config) => {
-  const url = 'https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus'
+  const url = 'https://cors-anywhere.herokuapp.com/https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus'
+  // const url = 'https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus'
 
   // @TODO: Data before 2020-03-01 is reliably and should be hard-coded data
   const regexList = {
@@ -83,7 +84,7 @@ const rivmPromise = (config) => {
         // Format before 25-03-2020
         '([0-9]+ (((nieuwe )?mensen positief getest)|(nieuwe patiënten bij het RIVM gemeld)))' +
         // Format after 25-03-2020
-        '|((?<=totaal aantal (?:gemelde |positief |geteste )+patiënten: [0-9]+ )\\\(\\\+[0-9]+\\\))' +
+        '|((?<=totaal aantal (?:gemelde |positief |geteste )+patiënten: [0-9.]+ )\\\(\\\+[0-9.]+\\\))' +
         ')', 'g'
       ),
       'titleRegex': /(?<cases>([0-9]+|[A-Z]?[a-z]+) nieuwe patiënten)/g,
@@ -93,7 +94,7 @@ const rivmPromise = (config) => {
         '(?<cases>totaal (?:aantal )?' +
         '(?:positie(?:f|ve) |geteste |testen |gemelde )+' +
         '(?:mensen|patiënten|in Nederland)?' +
-        '(?: op|:) [0-9]+)',
+        '(?: op|:) [0-9.]+)',
         'g'
       ),
       'titleRegex': new RegExp(
@@ -108,7 +109,7 @@ const rivmPromise = (config) => {
     'deceased-count': {
       'bodyRegex': new RegExp(
         '(?<cases>' +
-        '((?<=totaal aantal gemelde overleden patiënten: [0-9]+ )\\\(\\\+[0-9]+\\\))' +
+        '((?<=totaal aantal gemelde overleden patiënten: [0-9.]+ )\\\(\\\+[0-9.]+\\\))' +
         ')', 'g'
       ),
       'titleRegex': /(?<cases>([0-9]+|[A-Z]?[a-z]+) patiënt(?:en)? overleden)/g,
@@ -120,7 +121,7 @@ const rivmPromise = (config) => {
         '(mensen|patiënt(?:en)?|persoon|personen) (gemeld als )?' +
         '(is |zijn )?(met het coronavirus |gestorven ?|overleden ?|aan de ziekte ))' +
         // Format after 25-03-2020
-        '|(totaal aantal gemelde overleden patiënten: [0-9]+)' +
+        '|(totaal aantal gemelde overleden patiënten: [0-9.]+)' +
         ')', 'g'),
       'titleRegex': null,
     },
@@ -129,7 +130,7 @@ const rivmPromise = (config) => {
         // Format before 25-03-2020
         '(Van de nieuwe pati(e|ë)nten zijn (vier|twee|[0-9]+) (personen|mensen)( in het ziekenhuis| opgenomen)+)' +
         // Format after 25-03-2020
-        '|((?<=totaal aantal gemelde patiënten opgenomen \\\(geweest\\\) in het ziekenhuis: [0-9]+ )\\\(\\\+[0-9]+\\\))' +
+        '|((?<=totaal aantal gemelde patiënten opgenomen \\\(geweest\\\) in het ziekenhuis: [0-9.]+ )\\\(\\\+[0-9.]+\\\))' +
         ')',
         'g'
       ),
@@ -141,7 +142,7 @@ const rivmPromise = (config) => {
         // Format before 25-03-2020
         '([0-9]+ (patiënten|mensen) (die in het ziekenhuis )?opgenomen)' +
         // Format after 25-03-2020
-        '|(totaal aantal gemelde patiënten opgenomen \\\(geweest\\\) in het ziekenhuis: [0-9]+)' +
+        '|(totaal aantal gemelde patiënten opgenomen \\\(geweest\\\) in het ziekenhuis: [0-9.]+)' +
         ')',
         'g'
       ),
@@ -150,7 +151,7 @@ const rivmPromise = (config) => {
     'personell-total': {
       'bodyRegex': new RegExp('(?<cases>' +
         '([0-9]+ van de gemelde patiënten werken in de zorg.)' +
-        '|(Van de bevestigde personen werken er 179 in de zorg)' +
+        '|(Van de bevestigde personen werken er [0-9]+ in de zorg)' +
         '|([0-9]+ mensen die in de zorg werken)' +
         ')',
         'g'
@@ -196,10 +197,10 @@ const rivmPromise = (config) => {
       let total = null
 
       if (match[0]) {
-        total = convertNumericToNumber(match[0]).match(/[0-9]+/gi)
+        total = convertNumericToNumber(match[0]).match(/[0-9.]+/gi)
 
         if (total[0]) {
-          total = parseInt(total[0], 10)
+          total = parseInt(total[0].replace('.', ''), 10)
         }
       }
 
