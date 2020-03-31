@@ -1,13 +1,23 @@
 /*global fetch, Error, Request, Headers, Response, URL */
 
+/*/ src/NICE.js /*/
 const nicePromise = (config) => {
   const urlList = [
-    'https://www.stichting-nice.nl/covid-19/public/died-cumulative/',
-    'https://www.stichting-nice.nl/covid-19/public/ic-cumulative/',
-    'https://www.stichting-nice.nl/covid-19/public/intake-count/',
-    'https://www.stichting-nice.nl/covid-19/public/intake-cumulative/',
-    'https://www.stichting-nice.nl/covid-19/public/new-intake/',
+    /*/ @TODO: Add new non-date related URL/Data:
+      https://www.stichting-nice.nl/covid-19/public/age-distribution/
+      https://www.stichting-nice.nl/covid-19/public/age-distribution-died/
+    /*/
+    'died-and-survivors-cumulative',
+    'ic-cumulative',
+    'intake-count',
+    'intake-cumulative',
+    'new-intake',
   ]
+
+  const indexes = {
+    'died-and-survivors-cumulative': ['diedCumulative', 'survivors-cumulative']
+  }
+
 
   const descriptions = {
     'date': 'the date',
@@ -17,17 +27,22 @@ const nicePromise = (config) => {
     'intakeCount': 'Total number of COVID-19 patients present per date in the Dutch ICUs',
     'intakeCumulative': 'Total (cumulative) number of COVID-19 patients requiring ICU admission',
     'newIntake': 'Number of new ICU admissions with COVID-19 infection',
+    'survivors-cumulative': 'Total (cumulative) number of COVID-19 cases released from ICU',
   }
 
   const whitelist = Object.keys(descriptions)
 
-  const combineData = data => {
+  const combineData = fetchedData => {
     const combined = []
-    const ordered = [];
+    const data = []
+    const errors = []
 
-    data.forEach(collection => {
-      collection.forEach((items) => {
-        if ('date' in items) {
+    fetchedData.forEach(collection => {
+      collection.data.forEach((items, index) => {
+        if ('errors' in items) {
+          errors.push(items.errors)
+        } else if ('date' in items) {
+          // Format before 2020-03-30
           const date = items.date
 
           if (date in combined === false) {
@@ -45,20 +60,39 @@ const nicePromise = (config) => {
               combined[date][key] = value
             }
           })
+        } else if (indexes[collection.url]) {
+          // Format after 2020-03-30
+          const key = indexes[collection.url][index]
 
+          Object.entries(items).map(([_, value]) => {
+            if (value.date in combined === false) {
+              combined[value.date] = {}
+            }
+
+            combined[value.date]['date'] = value.date
+            combined[value.date][key] = value.value
+          })
+        } else {
+          // Unknow format! o_O ?
+          errors.push(`Unknow/Unsupported format for URL '${collection.url}'`)
         }
       })
     })
 
     Object.keys(combined).sort().forEach((key) => {
-      ordered.push(combined[key])
+      data.push(combined[key])
     });
 
-    return ordered
+    return { data, errors }
   }
 
-  const fetchJson = url => fetch(new Request(url))
-    .then(response => response.ok ? response.json() : {})
+  const fetchJson = url => fetch(new Request(
+      // 'https://cors-anywhere.herokuapp.com/' +
+      'https://www.stichting-nice.nl/covid-19/public/' + url
+    ))
+    .then(response => response.ok ? response.json() : [{
+      errors: `Could not fetch '${response.url}': ${response.statusText} (${response.status})`,
+    }]).then(data => ({ data, url }))
 
   const docs = {
     code_source: 'https://github.com/potherca-blog/covid19-netherlands-chart/NICE/',
@@ -68,10 +102,11 @@ const nicePromise = (config) => {
 
   return Promise.all(urlList.map(fetchJson))
     .then(combineData)
-    .then(data => ({ data, docs, status: 200 }))
-    .catch(error => ({ error: [error], status: 500 }))
+    .then(({ data, errors }) => ({ data, docs, errors, status: errors.length === 0 ? 200 : 500 }))
+    .catch(error => ({ errors: [error.toString()], status: 500 }))
 }
 
+/*/ src/RIVM.js /*/
 const rivmPromise = (config) => {
   const url = 'https://cors-anywhere.herokuapp.com/https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus'
   // const url = 'https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus'
@@ -273,6 +308,7 @@ const rivmPromise = (config) => {
     .catch(error => ({ error: [error], status: 500 }))
 }
 
+/*/ src/router.js /*/
 const router = [{
     callback: nicePromise,
     route: 'NICE',
@@ -283,6 +319,7 @@ const router = [{
   }
 ]
 
+/*/ src/api-bootstrap.js /*/
 const statusCodes = {
   100: "Continue",
   101: "Switching Protocols",
@@ -386,6 +423,10 @@ async function handleRequest(request) {
   const enhanceResponse = response => {
     response = response || {}
 
+    if (response.errors !== 'undefined' && response.errors.length === 0) {
+      delete response.errors
+    }
+
     /*/ Data /*/
     if (typeof response.data === 'undefined' && typeof response.errors === 'undefined') {
       response.errors = ['No data returned']
@@ -442,6 +483,8 @@ async function handleRequest(request) {
         status: 501
       })
     })
+
+    console.log(routes[0])
 
     return Promise.resolve(routes.shift().callback(config))
       .then(enhanceResponse)
