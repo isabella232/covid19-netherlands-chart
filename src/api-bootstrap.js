@@ -103,6 +103,10 @@ async function handleRequest(request) {
   const enhanceResponse = response => {
     response = response || {}
 
+    if (response.errors !== 'undefined' && response.errors.length === 0) {
+      delete response.errors
+    }
+
     /*/ Data /*/
     if (typeof response.data === 'undefined' && typeof response.errors === 'undefined') {
       response.errors = ['No data returned']
