@@ -423,7 +423,7 @@ async function handleRequest(request) {
   const enhanceResponse = response => {
     response = response || {}
 
-    if (response.errors !== 'undefined' && response.errors.length === 0) {
+    if (typeof response.errors !== 'undefined' && response.errors.length === 0) {
       delete response.errors
     }
 
