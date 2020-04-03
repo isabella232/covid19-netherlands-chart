@@ -18,7 +18,6 @@ const nicePromise = (config) => {
     'died-and-survivors-cumulative': ['diedCumulative', 'survivors-cumulative']
   }
 
-
   const descriptions = {
     'date': 'the date',
     'diedCumulative': 'Total (cumulative) number of fatal COVID-19 admissions to ICU',
@@ -108,10 +107,11 @@ const nicePromise = (config) => {
 
 /*/ src/RIVM.js /*/
 const rivmPromise = (config) => {
-  const url = 'https://cors-anywhere.herokuapp.com/https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus'
-  // const url = 'https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus'
+  // const url = 'https://cors-anywhere.herokuapp.com/https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus'
+  const url = 'https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus'
 
   // @TODO: Data before 2020-03-01 is reliably and should be hard-coded data
+
   const regexList = {
     'cases-count': {
       'bodyRegex': new RegExp(
@@ -195,13 +195,7 @@ const rivmPromise = (config) => {
     },
   }
 
-  const htmlRegex = new RegExp(
-    '<p>.*?(?<date>[0-9]{1,2}-[0-9]{1,2}-2020).*?<\/p>' +
-    '(.*|\\\n)+?' +
-    '<h2>(?<title>.+)<\/h2>' +
-    '(?<body>(?:.|\\\n)+?)<hr \/>',
-    'g'
-  );
+  const htmlRegex = /<p>.*?(?<date>[0-9]{1,2}-[0-9]{1,2}-2020).*?<\/p>(?<body>(?:.|\n)+?)<hr \/>/g;
 
   const extractNumber = (match, key) => {
     const convertNumericToNumber = total => (total.toLowerCase()
@@ -259,10 +253,30 @@ const rivmPromise = (config) => {
   const extractDate = matches => matches.map(match => {
     const [day, month, year] = match.groups.date.split('-')
 
-    match.data.date = `${year}-${month}-${day}`
+    match.data.date = `${year}-$ {month}-${day.padStart(2, '0')}`
 
     return match
   })
+
+  const grabHtmlData = text => Promise.resolve(text)
+    .then(text => text.matchAll(htmlRegex))
+    .then(matches => [...matches].map(match => match.groups))
+    .then(matches => {
+      return matches.map(match => ({
+        ...match,
+        title: match.body.match(/<h2>(?<title>.+)<\/h2>/)[1] || null
+      }))
+    })
+
+  const extractNumbers = matches => Promise.resolve(matches)
+    // @TODO: Te reduce iterations, combine all  steps into ONE function
+    .then(matches => matches.map(match => extractNumber(match, 'cases-total')))
+    .then(matches => matches.map(match => extractNumber(match, 'cases-count')))
+    .then(matches => matches.map(match => extractNumber(match, 'deceased-count')))
+    .then(matches => matches.map(match => extractNumber(match, 'deceased-total')))
+    .then(matches => matches.map(match => extractNumber(match, 'hospitalised-count')))
+    .then(matches => matches.map(match => extractNumber(match, 'hospitalised-total')))
+    .then(matches => matches.map(match => extractNumber(match, 'personell-total')))
 
   const docs = {
     code_source: 'https://github.com/potherca-blog/covid19-netherlands-chart/RIVM/',
@@ -279,26 +293,15 @@ const rivmPromise = (config) => {
     },
   }
 
-  return fetch(new Request(url))
-    .then(response => response.text())
-    // Grab all HTML data
-    .then(text => text.matchAll(htmlRegex))
-    // Grab only the matches
-    .then(matches => [...matches].map(match => ({
+  return fetch(new Request(url)).then(response => response.text())
+    .then(grabHtmlData)
+    .then(matches => matches.map(match => ({
       data: {},
-      groups: match.groups
+      groups: match
     })))
     .then(convertToText)
     .then(extractDate)
-    // @TODO: Te reduce iterations, combine all  steps into ONE function
-    // .then(extractNumbers)
-    .then(matches => matches.map(match => extractNumber(match, 'cases-total')))
-    .then(matches => matches.map(match => extractNumber(match, 'cases-count')))
-    .then(matches => matches.map(match => extractNumber(match, 'deceased-count')))
-    .then(matches => matches.map(match => extractNumber(match, 'deceased-total')))
-    .then(matches => matches.map(match => extractNumber(match, 'hospitalised-count')))
-    .then(matches => matches.map(match => extractNumber(match, 'hospitalised-total')))
-    .then(matches => matches.map(match => extractNumber(match, 'personell-total')))
+    .then(extractNumbers)
     // Remove all fully empty objects. `slice(1)` removes always present "date"
     .then(matches => matches.filter(match => Object.values(match.data).slice(1).reduce((a, b) => a + b, 0) !== 0))
     // Only return "data", for Regex debugging "groups" should also be returned
