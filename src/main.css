@@ -1,0 +1,28 @@
+html, body, div, h1 {
+  margin:0;
+  padding:0
+}
+
+body {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+div {
+  max-height:100%;
+  max-width:100%;
+  position: relative;
+  top: 8vw;
+}
+
+h1 {
+  font-family: sans-serif;
+  font-size: 4vw;
+  position: absolute;
+  top: 0em;
+  width: 100%;
+}
+
+title {
+  display: block;
+}

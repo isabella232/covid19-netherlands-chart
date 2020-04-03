@@ -17,6 +17,7 @@
 <meta property="og:description" content="Historical chart of known cases of COVID-19, including hospitalised and fatality count" />
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="src/main.css" type="text/css" />
 
 <h1>
   <title>
@@ -27,36 +28,5 @@
 <div class="chart-container">
   <canvas id="covid19-chart"></canvas>
 </div>
-
-<style>
-  html, body, div, h1 {
-    margin:0;
-    padding:0
-  }
-
-  body {
-    font-family: sans-serif;
-    text-align: center;
-  }
-
-  div {
-    max-height:100%;
-    max-width:100%;
-    position: relative;
-    top: 8vw;
-  }
-
-  h1 {
-    font-family: sans-serif;
-    font-size: 4vw;
-    position: absolute;
-    top: 0em;
-    width: 100%;
-  }
-
-  title {
-    display: block;
-  }
-</style>
 
 <script src="./src/main.js"></script>
