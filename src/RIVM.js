@@ -155,12 +155,10 @@ const rivmPromise = (config) => {
   const grabHtmlData = text => Promise.resolve(text)
     .then(text => text.matchAll(htmlRegex))
     .then(matches => [...matches].map(match => match.groups))
-    .then(matches => {
-      return matches.map(match => ({
-        ...match,
-        title: match.body.match(/<h2>(?<title>.+)<\/h2>/)[1] || null
-      }))
-    })
+    .then(matches => matches.map(match => ({
+      ...match,
+      title: (match.body.match(/<h2>(?<title>.+)<\/h2>/) || ['']).pop()
+    })))
 
   const extractNumbers = matches => Promise.resolve(matches)
     // @TODO: Te reduce iterations, combine all  steps into ONE function
@@ -202,7 +200,6 @@ const rivmPromise = (config) => {
     .then(matches => matches.map(match => match.data))
     // Final Response
     .then(matches => ({ data: matches, docs: docs, status: 200 }))
-    .catch(error => ({ error: [error], status: 500 }))
 }
 
 router = typeof(router) == 'undefined' ? [] : router;
