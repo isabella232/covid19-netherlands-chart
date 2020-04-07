@@ -107,10 +107,7 @@ const nicePromise = (config) => {
 
 /*/ src/RIVM.js /*/
 const rivmPromise = (config) => {
-  // const url = 'https://cors-anywhere.herokuapp.com/https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus'
   const url = 'https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus'
-
-  // @TODO: Data before 2020-03-01 is reliably and should be hard-coded data
 
   const regexList = {
     'cases-count': {
@@ -253,7 +250,7 @@ const rivmPromise = (config) => {
   const extractDate = matches => matches.map(match => {
     const [day, month, year] = match.groups.date.split('-')
 
-    match.data.date = `${year}-$ {month}-${day.padStart(2, '0')}`
+    match.data.date = `${year}-${month}-${day.padStart(2, '0')}`
 
     return match
   })
@@ -261,12 +258,10 @@ const rivmPromise = (config) => {
   const grabHtmlData = text => Promise.resolve(text)
     .then(text => text.matchAll(htmlRegex))
     .then(matches => [...matches].map(match => match.groups))
-    .then(matches => {
-      return matches.map(match => ({
-        ...match,
-        title: match.body.match(/<h2>(?<title>.+)<\/h2>/)[1] || null
-      }))
-    })
+    .then(matches => matches.map(match => ({
+      ...match,
+      title: (match.body.match(/<h2>(?<title>.+)<\/h2>/) || ['']).pop()
+    })))
 
   const extractNumbers = matches => Promise.resolve(matches)
     // @TODO: Te reduce iterations, combine all  steps into ONE function
@@ -308,7 +303,6 @@ const rivmPromise = (config) => {
     .then(matches => matches.map(match => match.data))
     // Final Response
     .then(matches => ({ data: matches, docs: docs, status: 200 }))
-    .catch(error => ({ error: [error], status: 500 }))
 }
 
 /*/ src/router.js /*/
