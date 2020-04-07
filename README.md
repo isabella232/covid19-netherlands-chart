@@ -13,18 +13,14 @@ See it online at https://blog.pother.ca/covid19-netherlands-chart/
 
 ## Overall information
 
-At the time of this writing (2020-03-27):
+The general information is retrieved (indirectly) from the Netherlands National 
+Institute for Public Health and the Environment (RIVM) at https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus
 
-- **25.90%** of known cases have been **hospital personnel**
-- **29.06%** of known cases have been **hospitalised**
-- **6.35%** of known cases have been **fatal**
-- The age of the deceased lies between 55 and 97 years, the median is 82.
+The information on the RIVM site at is updated daily at 14.00.
 
-The information on the RIVM site at https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus
-is updated daily at 14.00.
+For details see [./RIVM](./RIVM)
 
-If you prefer tabular data (or are wondering where the percentages come from),
-visit this Spreadsheet: https://docs.google.com/spreadsheets/d/1a_3IaIsmJt4WDgdZtrfl2YPzU9LvQWLkCAYFdPe1YkU/
+<!-- https://docs.google.com/spreadsheets/d/1a_3IaIsmJt4WDgdZtrfl2YPzU9LvQWLkCAYFdPe1YkU/ -->
 
 ## Intensive Care (IC) information
 
